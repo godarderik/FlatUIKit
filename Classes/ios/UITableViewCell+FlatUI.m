@@ -12,37 +12,36 @@
 
 @implementation UITableViewCell (FlatUI)
 
-@dynamic cornerRadius, separatorHeight;
+@dynamic cornerRadius, separatorHeight, color, selectedColor;
 
-+ (UITableViewCell*) configureFlatCellWithColor:(UIColor *)color selectedColor:(UIColor *)selectedColor reuseIdentifier:(NSString*)reuseIdentifier inTableView:(UITableView *)tableView {
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:reuseIdentifier];
-    
-    [cell configureFlatCellWithColor:color selectedColor:selectedColor];
-    
-    return cell;
-}
-
-- (void) configureFlatCellWithColor:(UIColor *)color selectedColor:(UIColor *)selectedColor {
+-(void)setColor:(UIColor *)color {
     FUICellBackgroundView* backgroundView = [FUICellBackgroundView new];
     backgroundView.backgroundColor = color;
     self.backgroundView = backgroundView;
     
-    FUICellBackgroundView* selectedBackgroundView = [FUICellBackgroundView new];
-    selectedBackgroundView.backgroundColor = selectedColor;
-    self.selectedBackgroundView = selectedBackgroundView;
-    
-    //The labels need a clear background color or they will look very funky
     self.textLabel.backgroundColor = [UIColor clearColor];
     if ([self respondsToSelector:@selector(detailTextLabel)])
         self.detailTextLabel.backgroundColor = [UIColor clearColor];
     
-    //Guess some good text colors
-    self.textLabel.textColor = selectedColor;
     self.textLabel.highlightedTextColor = color;
+    
+    if ([self respondsToSelector:@selector(detailTextLabel)]) {
+        
+        self.detailTextLabel.highlightedTextColor = color;
+    }
+    
+}
+
+-(void)setSelectedColor:(UIColor *)selectedColor {
+    FUICellBackgroundView* selectedBackgroundView = [FUICellBackgroundView new];
+    selectedBackgroundView.backgroundColor = selectedColor;
+    self.selectedBackgroundView = selectedBackgroundView;
+    
+    self.textLabel.textColor = selectedColor;
+    
+    
     if ([self respondsToSelector:@selector(detailTextLabel)]) {
         self.detailTextLabel.textColor = selectedColor;
-        self.detailTextLabel.highlightedTextColor = color;
     }
 
 }
